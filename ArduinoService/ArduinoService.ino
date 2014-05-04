@@ -1,36 +1,34 @@
-#include <Ethernet.h>
 #include <SPI.h>
+#include <Ethernet.h>
 
-byte mac[] = { 0x90, 0xA2, 0xDA, 0x00, 0x9B, 0x36 }; 
+byte mac[] = { 0x90, 0xA2, 0xDA, 0x00, 0x9B, 0x36 };
 byte ip[] = { 192, 168, 0, 99 };
-byte gateway[] = { 192, 168, 0, 99 };
+byte gateway[] = { 192, 168, 0, 1 };
 byte subnet[] = { 255, 255, 255, 0 };
 EthernetServer server(80);
 
 void setup() {
-  Ethernet.begin(mac, ip);
-  server.begin();
+  Serial.begin(9600);
+  Ethernet.begin(mac, ip, gateway, subnet);
+  Serial.println("Iniciando o servidor...");
 }
 
 void loop() {
-
-EthernetClient client = server.available();    
+  EthernetClient client = server.available();
   if (client) {
-    while (client.connected()) { 
-      while (client.available()) {
-        Serial.print(client.read());    
-      }     
-      
-      client.println("Bem Vindo! Arduino!");
-      delay(2);
-      
-      while (client.available()) {
-        Serial.print(client.read());    
-      }      
-      delay(2);
-      client.stop();
-      break;
+    String clientMsg = "";
+    while (client.connected()) {
+      if (client.available()) {
+        char c = client.read();      
+        clientMsg+=c;
+        if (c == '\n') {
+          Serial.println("Mensagem do cliente: " +clientMsg);
+          client.println("Mensagem de resposta:"+clientMsg);
+          clientMsg = "";
+        }
+      }
     }
-   while(1);
+    delay(1);
+    client.stop();
   }
 }
