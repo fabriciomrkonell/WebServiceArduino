@@ -14,7 +14,7 @@ public class WebService {
     
     public static void main(String[] args) throws IOException{        
         
-        Socket client = new Socket("192.169.1.201", 80);   
+        Socket client = new Socket("192.168.0.99", 80);   
                                                                                                           
         //Receber dados
         DataInputStream in = new DataInputStream(client.getInputStream());
