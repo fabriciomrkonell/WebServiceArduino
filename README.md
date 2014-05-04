@@ -1,4 +1,4 @@
-WebServiceArduino
+Web Service Arduino
 =================
 
-Web Service com Arduino, em Java.
+Comunicação via Socket com Arduino, em Java
